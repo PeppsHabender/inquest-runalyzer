@@ -1,0 +1,27 @@
+name: Flutter2Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'
+          channel: 'stable'
+      - name: Enable Flutter Web
+        run: flutter config --enable-web
+      - name: Download Dependencies
+        run: flutter pub get
+      - name: Build
+        run: flutter build web --release
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
