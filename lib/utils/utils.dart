@@ -68,7 +68,7 @@ Future<T> doHttpRequest<T>(
   bool withApiKey,
   ResponseHandler<T> handler,
   {
-    String host = "18.206.88.17:80",
+    String host = "service.peppshabender.de",
     HttpMethod method = HttpMethod.GET,
     Object? body,
     Map<String, dynamic>? queryParams,
@@ -79,7 +79,7 @@ Future<T> doHttpRequest<T>(
   if(withApiKey) newHeaders["X-API-KEY"] = RunalyzerStorage.apiKey ?? "";
   if(method == HttpMethod.POST) newHeaders["Content-Type"] = "application/json";
 
-  final Uri uri = Uri.http(host, endpoint).replace(queryParameters: queryParams?.map((k, v) => MapEntry(k, v.toString())));
+  final Uri uri = Uri.https(host, endpoint).replace(queryParameters: queryParams?.map((k, v) => MapEntry(k, v.toString())));
 
   if(method == HttpMethod.GET) {
     return http.get(uri, headers: newHeaders).then((value) => handler(value.statusCode, value.body));
