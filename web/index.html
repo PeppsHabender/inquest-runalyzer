@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="runalyzer_client">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="inquest_logo.png"/>
+
+  <title>Runalyzer</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = null;
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body style="background-color: #1C1B1F">
+<div class="center">
+  <p style="text-align: center; font-size: 28px; font-weight: bold; color: #ED2939">Initializing Flutter</p>
+  <div id="loading">
+    <span class="loading_dot"></span>
+    <span class="loading_dot"></span>
+    <span class="loading_dot"></span>
+  </div>
+</div>
+<script>
+  window.addEventListener('load', function(ev) {
+    _flutter.loader.loadEntrypoint({
+      serviceWorker: {
+        serviceWorkerVersion: serviceWorkerVersion,
+      },
+      onEntrypointLoaded: async function(engineInitializer) {
+        await engineInitializer.autoStart();
+      }
+    });
+  });
+</script>
+<!--  <script>-->
+<!--    window.addEventListener('load', function(ev) {-->
+<!--      // Download main.dart.js-->
+<!--      _flutter.loader.loadEntrypoint({-->
+<!--        serviceWorker: {-->
+<!--          serviceWorkerVersion: serviceWorkerVersion,-->
+<!--        },-->
+<!--        onEntrypointLoaded: function(engineInitializer) {-->
+<!--          engineInitializer.initializeEngine().then(function(appRunner) {-->
+<!--            appRunner.runApp();-->
+<!--          });-->
+<!--        }-->
+<!--      });-->
+<!--    });-->
+<!--  </script>-->
+</body>
+</html>
