@@ -47,12 +47,14 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _accName(BuildContext context) => Stack(
-    alignment: Alignment.center,
-    children: [
-      waterMark(color: Theme.of(context).canvasColor.darker(0.02)),
-      Center(child: Text(RunalyzerStorage.accountName ?? "", style: const TextStyle(fontSize: 18.5)))
-    ],
-  );
+        alignment: Alignment.center,
+        children: [
+          waterMark(color: Theme.of(context).canvasColor.darker(0.02)),
+          Center(
+              child: Text(RunalyzerStorage.accountName ?? "",
+                  style: const TextStyle(fontSize: 18.5)))
+        ],
+      );
 }
 
 class RecentLogView extends StatelessWidget {
@@ -64,30 +66,34 @@ class RecentLogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) => Expanded(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text("Your latest logs:", style: TextStyle(fontSize: 17)),
-        const Divider(),
-        Obx(() => ListView.separated(
-          separatorBuilder: (_, idx) => const SizedBox(height: 5),
-          shrinkWrap: true,
-          itemCount: _controller.model.recentLogs.length,
-          itemBuilder: (_, idx) {
-            final DpsReport log = _controller.model.recentLogs[idx];
-            return Align(alignment: Alignment.centerLeft, child: Hyperlink(log.permalink));
-          },
-        )),
-        Center(
-          child: Obx(() => Visibility(
-            visible: _controller.model.hasMore.value,
-            child: OutlinedButton(
-              onPressed: _controller.model.loading.value ? null : _controller.loadMoreLogs,
-              child: const Text("Load More"),
-            ),
-          )),
-        )
-      ],
-    ),
-  );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Your latest logs:", style: TextStyle(fontSize: 17)),
+            const Divider(),
+            Obx(() => ListView.separated(
+                  separatorBuilder: (_, idx) => const SizedBox(height: 5),
+                  shrinkWrap: true,
+                  itemCount: _controller.model.recentLogs.length,
+                  itemBuilder: (_, idx) {
+                    final DpsReport log = _controller.model.recentLogs[idx];
+                    return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Hyperlink(log.permalink));
+                  },
+                )),
+            Center(
+              child: Obx(() => Visibility(
+                    visible: _controller.model.hasMore.value,
+                    child: OutlinedButton(
+                      onPressed: _controller.model.loading.value
+                          ? null
+                          : _controller.loadMoreLogs,
+                      child: const Text("Load More"),
+                    ),
+                  )),
+            )
+          ],
+        ),
+      );
 }

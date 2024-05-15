@@ -12,7 +12,7 @@ class ApiKeyController extends GetxController {
   final Rx<String?> errMessage = (null as String?).obs;
 
   ApiKeyController() {
-    if(RunalyzerStorage.apiKey != null) _return();
+    if (RunalyzerStorage.apiKey != null) _return();
   }
 
   bool canLoad() => apiKey.value.isNotEmpty && !loading.value;
@@ -22,7 +22,7 @@ class ApiKeyController extends GetxController {
     _authService.validate(apiKey.value).then((value) {
       loading.value = false;
 
-      if(value == null) {
+      if (value == null) {
         _return();
       } else {
         _reset(value);
@@ -36,5 +36,6 @@ class ApiKeyController extends GetxController {
     errMessage.value = msg;
   }
 
-  void _return() => Get.offAllNamed(Get.parameters["return"] ?? RunalyzerLinks.HOME);
+  void _return() =>
+      Get.offAllNamed(Get.parameters["return"] ?? RunalyzerLinks.HOME);
 }

@@ -23,7 +23,8 @@ class DpsReport {
     required this.members,
   });
 
-  factory DpsReport.fromJson(Map<String, dynamic> json) => _$DpsReportFromJson(json);
+  factory DpsReport.fromJson(Map<String, dynamic> json) =>
+      _$DpsReportFromJson(json);
 }
 
 @JsonSerializable()
@@ -46,6 +47,6 @@ class Encounter {
     required this.jsonAvailable,
   });
 
-  factory Encounter.fromJson(Map<String, dynamic> json) => _$EncounterFromJson(json);
+  factory Encounter.fromJson(Map<String, dynamic> json) =>
+      _$EncounterFromJson(json);
 }
-

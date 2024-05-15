@@ -17,46 +17,49 @@ class StaticView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Obx(() {
-    final RxFuture<List<Static>> staticsFuture = _statics.staticsFuture;
+        final RxFuture<List<Static>> staticsFuture = _statics.staticsFuture;
 
-    if(staticsFuture.loading) {
-      return const Center(child: SizedBox(width: 50, height: 50,  child: CircularProgressIndicator()));
-    }
+        if (staticsFuture.loading) {
+          return const Center(
+              child: SizedBox(
+                  width: 50, height: 50, child: CircularProgressIndicator()));
+        }
 
-    final List<Static> statics = staticsFuture.value.value;
+        final List<Static> statics = staticsFuture.value.value;
 
-    return MasonryGridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 2,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      itemCount: statics.length,
-      itemBuilder: (_, idx) {
-        final RxBool hovered = false.obs;
-        final Static static = statics[idx];
+        return MasonryGridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          itemCount: statics.length,
+          itemBuilder: (_, idx) {
+            final RxBool hovered = false.obs;
+            final Static static = statics[idx];
 
-        return InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          onTap: () => Get.offAndToNamed(RunalyzerLinks.STATIC, parameters: {RunalyzerLinks.STATIC_ID: static.id}),
-          onHover: (h) => hovered.value = h,
-          child: Obx(() => AnimatedScale(
-            alignment: FractionalOffset.center,
-            scale: hovered.value ? 0.9 : 1,
-            curve: Curves.easeOut,
-            duration: const Duration(milliseconds: 100),
-            child: StaticCard(static),
-          )),
+            return InkWell(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              onTap: () => Get.offAndToNamed(RunalyzerLinks.STATIC,
+                  parameters: {RunalyzerLinks.STATIC_ID: static.id}),
+              onHover: (h) => hovered.value = h,
+              child: Obx(() => AnimatedScale(
+                    alignment: FractionalOffset.center,
+                    scale: hovered.value ? 0.9 : 1,
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 100),
+                    child: StaticCard(static),
+                  )),
+            );
+          },
         );
-      },
-    );
-  });
+      });
 }
 
 class StaticCard extends StatelessWidget {
   static final DateFormat FORMAT = DateFormat("dd.MM.yyyy HH:mm");
-  
+
   final StaticController _statics = Get.find();
   final Static _static;
 
@@ -64,35 +67,36 @@ class StaticCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(_static.name, style: context.textTheme.headlineMedium),
-          const Divider(),
-          Obx(() {
-            final StaticRun? run = _statics.lastRun(_static);
-            return run == null
-              ? (_statics.loadingStatics.contains(_static.id)
-                ? const Center(child: CircularProgressIndicator())
-                : const Text("No runs found for this static..."))
-              : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Latest Run:", style: context.textTheme.bodyLarge),
-                  _runView(context, run),
-                ],
-              );
-          })
-        ],
-      ),
-    ),
-  );
-  
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(_static.name, style: context.textTheme.headlineMedium),
+              const Divider(),
+              Obx(() {
+                final StaticRun? run = _statics.lastRun(_static);
+                return run == null
+                    ? (_statics.loadingStatics.contains(_static.id)
+                        ? const Center(child: CircularProgressIndicator())
+                        : const Text("No runs found for this static..."))
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Latest Run:",
+                              style: context.textTheme.bodyLarge),
+                          _runView(context, run),
+                        ],
+                      );
+              })
+            ],
+          ),
+        ),
+      );
+
   Widget _runView(final BuildContext context, final StaticRun run) {
     final StaticAnalysis? analysis = run.analysis;
-    if(analysis == null || analysis.start == null) return Container();
+    if (analysis == null || analysis.start == null) return Container();
 
     return Column(
       children: [
@@ -132,7 +136,9 @@ class StaticCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 5),
-        Text(_quickAnalysis(analysis), style: context.textTheme.bodyMedium?.copyWith(fontSize: 15), textAlign: TextAlign.justify)
+        Text(_quickAnalysis(analysis),
+            style: context.textTheme.bodyMedium?.copyWith(fontSize: 15),
+            textAlign: TextAlign.justify)
       ],
     );
   }
@@ -142,9 +148,9 @@ class StaticCard extends StatelessWidget {
     final int fails = analysis.wipes.length;
 
     String quickAnalysis = "Run completed with";
-    if(success != 0) quickAnalysis += " $success successful";
-    if(success != 0 && fails != 0) quickAnalysis += " and";
-    if(fails != 0) quickAnalysis += " $fails failed";
+    if (success != 0) quickAnalysis += " $success successful";
+    if (success != 0 && fails != 0) quickAnalysis += " and";
+    if (fails != 0) quickAnalysis += " $fails failed";
 
     return "$quickAnalysis encounters, and an average time per boss of "
         "${Duration(milliseconds: (analysis.averageTimePerBoss * 1000).round()).pretty()}.";

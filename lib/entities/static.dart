@@ -13,15 +13,14 @@ class Static {
   final List<String> players;
   final List<Commander> commanders;
 
-  Static({
-    required this.id,
-    required this.name,
-    required this.creator,
-    required this.timeSlot,
-    required this.type,
-    this.players = const [],
-    this.commanders = const []
-  });
+  Static(
+      {required this.id,
+      required this.name,
+      required this.creator,
+      required this.timeSlot,
+      required this.type,
+      this.players = const [],
+      this.commanders = const []});
 
   factory Static.fromJson(Map<String, dynamic> json) => _$StaticFromJson(json);
 }
@@ -33,14 +32,14 @@ class StaticTimeSlot {
   int minute;
   String zoneStr;
 
-  StaticTimeSlot({
-    required this.day,
-    required this.hour,
-    required this.minute,
-    required this.zoneStr
-  });
+  StaticTimeSlot(
+      {required this.day,
+      required this.hour,
+      required this.minute,
+      required this.zoneStr});
 
-  factory StaticTimeSlot.fromJson(Map<String, dynamic> json) => _$StaticTimeSlotFromJson(json);
+  factory StaticTimeSlot.fromJson(Map<String, dynamic> json) =>
+      _$StaticTimeSlotFromJson(json);
 }
 
 @JsonSerializable()
@@ -55,7 +54,8 @@ class Commander {
     required this.canModify,
   });
 
-  factory Commander.fromJson(Map<String, dynamic> json) => _$CommanderFromJson(json);
+  factory Commander.fromJson(Map<String, dynamic> json) =>
+      _$CommanderFromJson(json);
 }
 
 enum StaticType {

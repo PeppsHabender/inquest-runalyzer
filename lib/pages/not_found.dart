@@ -7,10 +7,9 @@ class NotFoundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: waterMark(
-        color: Theme.of(context).canvasColor.darker(0.03),
-        text: "404 Not Found",
-        fontSize: 140
-    ),
-  );
+        body: waterMark(
+            color: Theme.of(context).canvasColor.darker(0.03),
+            text: "404 Not Found",
+            fontSize: 140),
+      );
 }

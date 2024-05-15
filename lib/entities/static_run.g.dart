@@ -121,8 +121,8 @@ Map<String, dynamic> _$OffensiveStatsToJson(OffensiveStats instance) =>
       'cc': instance.cc,
     };
 
-DefensiveStats _$DefensiveStatsFromJson(Map<String, dynamic> json) {
-  return DefensiveStats()
+DefensiveStats _$DefensiveStatsFromJson(Map<String, dynamic> json) =>
+    DefensiveStats()
       ..player = json['player'] as String?
       ..damageTaken = (json['damageTaken'] as num).toDouble()
       ..downstates = (json['downstates'] as num).toDouble()
@@ -132,14 +132,13 @@ DefensiveStats _$DefensiveStatsFromJson(Map<String, dynamic> json) {
       ..boonStrips = (json['boonStrips'] as num).toDouble()
       ..healing = (json['healing'] as num?)?.toDouble()
       ..barrier = (json['barrier'] as num?)?.toDouble();
-}
 
 Map<String, dynamic> _$DefensiveStatsToJson(DefensiveStats instance) =>
     <String, dynamic>{
       'player': instance.player,
       'damageTaken': instance.damageTaken,
       'downstates': instance.downstates,
-      'death': instance.deaths,
+      'deaths': instance.deaths,
       'resTime': instance.resTime,
       'condiCleanses': instance.condiCleanses,
       'boonStrips': instance.boonStrips,

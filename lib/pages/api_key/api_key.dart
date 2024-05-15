@@ -20,7 +20,8 @@ class ApiKeyPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          waterMark(color: Theme.of(context).canvasColor.darker(0.02), fontSize: 150),
+          waterMark(
+              color: Theme.of(context).canvasColor.darker(0.02), fontSize: 150),
           Center(
             child: SizedBox(
               width: 600,
@@ -31,15 +32,18 @@ class ApiKeyPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _cardHeader(),
-                      const SizedBox(height: 20,),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       RxTextField(
                         text: _controller.apiKey,
                       ),
-                      const SizedBox(height: 10,),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: _TryKeyButton()
+                      const SizedBox(
+                        height: 10,
                       ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: _TryKeyButton()),
                       _ErrorMessage()
                     ],
                   ),
@@ -54,12 +58,12 @@ class ApiKeyPage extends StatelessWidget {
   }
 
   Widget _cardHeader() => const Align(
-    alignment: Alignment.bottomLeft,
-    child: Text(
-      "Add your Gw2 Api Key to continue...",
-      style: TextStyle(fontSize: 20),
-    ),
-  );
+        alignment: Alignment.bottomLeft,
+        child: Text(
+          "Add your Gw2 Api Key to continue...",
+          style: TextStyle(fontSize: 20),
+        ),
+      );
 }
 
 class _TryKeyButton extends StatelessWidget {
@@ -67,11 +71,11 @@ class _TryKeyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) => Obx(
-    () => OutlinedButton(
-      onPressed: _controller.canLoad() ? _controller.tryAuthenticating : null,
-      child: const Text("Add API Key")
-    ),
-  );
+        () => OutlinedButton(
+            onPressed:
+                _controller.canLoad() ? _controller.tryAuthenticating : null,
+            child: const Text("Add API Key")),
+      );
 }
 
 class _ErrorMessage extends StatelessWidget {
@@ -79,21 +83,21 @@ class _ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ObxValue(
-    (message) => Visibility(
-      visible: message.value != null,
-      child: Column(
-        children: [
-          const SizedBox(height: 20,),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              message.value ?? "",
-              style: const TextStyle(color: RunalyzerColors.INQUEST_RED),
-            ),
-          ),
-        ],
-      )
-    ),
-    _controller.errMessage
-  );
+      (message) => Visibility(
+          visible: message.value != null,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  message.value ?? "",
+                  style: const TextStyle(color: RunalyzerColors.INQUEST_RED),
+                ),
+              ),
+            ],
+          )),
+      _controller.errMessage);
 }

@@ -10,19 +10,21 @@ class MongoDateTime {
 
   MongoDateTime({required this.date, required this.offset});
 
-  factory MongoDateTime.fromJson(Map<String, dynamic> json) => _$MongoDateTimeFromJson(json);
+  factory MongoDateTime.fromJson(Map<String, dynamic> json) =>
+      _$MongoDateTimeFromJson(json);
 
   Map<String, dynamic> toJson() => _$MongoDateTimeToJson(this);
 }
 
 @JsonSerializable()
-class StaticRun {
+class StaticRun extends JsonSerializable {
   StaticAnalysis? analysis;
   List<String> players = [];
 
   StaticRun({this.analysis});
 
-  factory StaticRun.fromJson(Map<String, dynamic> json) => _$StaticRunFromJson(json);
+  factory StaticRun.fromJson(Map<String, dynamic> json) =>
+      _$StaticRunFromJson(json);
 
   Map<String, dynamic> toJson() => _$StaticRunToJson(this);
 }
@@ -45,7 +47,8 @@ class StaticAnalysis {
 
   StaticAnalysis();
 
-  factory StaticAnalysis.fromJson(Map<String, dynamic> json) => _$StaticAnalysisFromJson(json);
+  factory StaticAnalysis.fromJson(Map<String, dynamic> json) =>
+      _$StaticAnalysisFromJson(json);
 
   Map<String, dynamic> toJson() => _$StaticAnalysisToJson(this);
 }
@@ -75,7 +78,8 @@ class OffensiveStats {
 
   OffensiveStats();
 
-  factory OffensiveStats.fromJson(Map<String, dynamic> json) => _$OffensiveStatsFromJson(json);
+  factory OffensiveStats.fromJson(Map<String, dynamic> json) =>
+      _$OffensiveStatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$OffensiveStatsToJson(this);
 }
@@ -94,7 +98,8 @@ class DefensiveStats {
 
   DefensiveStats();
 
-  factory DefensiveStats.fromJson(Map<String, dynamic> json) => _$DefensiveStatsFromJson(json);
+  factory DefensiveStats.fromJson(Map<String, dynamic> json) =>
+      _$DefensiveStatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$DefensiveStatsToJson(this);
 }
@@ -108,15 +113,13 @@ class BoonStats {
   List<double>? generation;
 
   BoonStats(
-    {
-      required this.player,
+      {required this.player,
       required this.boons,
       required this.uptime,
-      this.generation
-    }
-  );
+      this.generation});
 
-  factory BoonStats.fromJson(Map<String, dynamic> json) => _$BoonStatsFromJson(json);
+  factory BoonStats.fromJson(Map<String, dynamic> json) =>
+      _$BoonStatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$BoonStatsToJson(this);
 }

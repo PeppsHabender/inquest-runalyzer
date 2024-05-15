@@ -12,19 +12,23 @@ class AuthService {
 
   Future<String?> validate([String? key]) {
     return key == null
-    ? Future(() => "No API key!")
-    : doHttpRequest("/api/testKey", false, headers: {"X-API-KEY":key}, (status, body) => _handleResponse(key, status, body))
-        .catchError((ex) {
-          print(ex.toString());
-          return Future(() => ex.toString());
-        });
+        ? Future(() => "No API key!")
+        : doHttpRequest(
+                "/api/testKey",
+                false,
+                headers: {"X-API-KEY": key},
+                (status, body) => _handleResponse(key, status, body))
+            .catchError((ex) {
+            print(ex.toString());
+            return Future(() => ex.toString());
+          });
   }
 
   String? _handleResponse(String key, int status, String body) {
-    if(status > 200) return body.isEmpty ? "Failed to validate API key" : body;
+    if (status > 200) return body.isEmpty ? "Failed to validate API key" : body;
 
     final String accName = jsonDecode(body) as String;
-    if(accName.isNotEmpty) {
+    if (accName.isNotEmpty) {
       RunalyzerStorage.apiKey = key;
       RunalyzerStorage.accountName = accName;
     }
@@ -51,6 +55,8 @@ class AuthMiddleware extends GetMiddleware {
       return null;
     }
 
-    return RouteSettings(name: "${RunalyzerLinks.API_KEY}?return=${Uri.encodeFull(route ?? "")}");
+    return RouteSettings(
+        name:
+            "${RunalyzerLinks.API_KEY}?return=${Uri.encodeFull(route ?? "")}");
   }
 }

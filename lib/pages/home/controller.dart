@@ -13,18 +13,20 @@ class LogsController extends GetxController {
   int _page = 0;
 
   void loadMoreLogs() {
-    if(!model.hasMore.value || model.loading.value) return;
+    if (!model.hasMore.value || model.loading.value) return;
 
     model.loading.value = true;
 
-    doHttpRequest("/api/logs", true, _addNewLogs, queryParams: {"page":_page.toString()});
+    doHttpRequest("/api/logs", true, _addNewLogs,
+        queryParams: {"page": _page.toString()});
   }
 
   void _addNewLogs(int status, String body) {
     model.loading.value = false;
-    if(status > 200) return;
+    if (status > 200) return;
 
-    final Page<DpsReport> page = Page<DpsReport>.fromJson(jsonDecode(body) as Map<String, dynamic>, DpsReport.fromJson);
+    final Page<DpsReport> page = Page<DpsReport>.fromJson(
+        jsonDecode(body) as Map<String, dynamic>, DpsReport.fromJson);
     model.recentLogs.value = page.items..addAll(model.recentLogs);
     model.hasMore.value = page.hasMore;
 

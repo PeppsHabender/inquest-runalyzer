@@ -17,32 +17,36 @@ void main() async {
 }
 
 class RunalyzerApp extends StatelessWidget {
-
   const RunalyzerApp({super.key});
 
   @override
   Widget build(BuildContext context) => GetMaterialApp(
-    debugShowCheckedModeBanner: false,
-    themeMode: ThemeMode.dark,
-    theme: ThemeData.dark().copyWith(
-      primaryColor: RunalyzerColors.INQUEST_RED,
-      textTheme: GoogleFonts.ptSerifTextTheme(ThemeData.dark().textTheme)
-    ),
-    navigatorObservers: [FlutterSmartDialog.observer],
-    builder: FlutterSmartDialog.init(),
-    initialBinding: _RunalyzerBinding(),
-    initialRoute: RunalyzerLinks.HOME,
-    unknownRoute: GetPage(name: "/404", page: () => const NotFoundPage()),
-    getPages: [
-      GetPage(name: RunalyzerLinks.API_KEY, page: () => ApiKeyPage()),
-      GetPage(name: RunalyzerLinks.HOME, page: () => HomePage(), middlewares: [AuthMiddleware()]),
-      GetPage(name: RunalyzerLinks.STATIC, page: () => StaticPage(), middlewares: [AuthMiddleware()])
-    ],
-  );
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.dark,
+        theme: ThemeData.dark().copyWith(
+            primaryColor: RunalyzerColors.INQUEST_RED,
+            textTheme:
+                GoogleFonts.ptSerifTextTheme(ThemeData.dark().textTheme)),
+        navigatorObservers: [FlutterSmartDialog.observer],
+        builder: FlutterSmartDialog.init(),
+        initialBinding: _RunalyzerBinding(),
+        initialRoute: RunalyzerLinks.HOME,
+        unknownRoute: GetPage(name: "/404", page: () => const NotFoundPage()),
+        getPages: [
+          GetPage(name: RunalyzerLinks.API_KEY, page: () => ApiKeyPage()),
+          GetPage(
+              name: RunalyzerLinks.HOME,
+              page: () => HomePage(),
+              middlewares: [AuthMiddleware()]),
+          GetPage(
+              name: RunalyzerLinks.STATIC,
+              page: () => StaticPage(),
+              middlewares: [AuthMiddleware()])
+        ],
+      );
 }
 
 class _RunalyzerBinding implements Bindings {
   @override
-  void dependencies() {
-  }
+  void dependencies() {}
 }

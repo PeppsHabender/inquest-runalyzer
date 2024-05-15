@@ -21,40 +21,41 @@ class RxTextField extends StatelessWidget {
   final TextAlignVertical? textAlignVertical;
   final FocusNode? focusNode;
 
-  RxTextField({
-    super.key,
-    this.label = "",
-    this.errorText = "",
-    this.maxChars,
-    RxString? text,
-    RxBool? erroneous,
-    this.enabled,
-    this.decoration,
-    this.style,
-    this.textAlignVertical,
-    this.focusNode,
-    bool Function(String)? validator
-  }) : text = text ?? "".obs,
-        erroneous = erroneous ?? validator?.call(text?.value ?? "").notObs() ?? false.obs,
-        validator = validator ?? ((_) => true)
-  {
+  RxTextField(
+      {super.key,
+      this.label = "",
+      this.errorText = "",
+      this.maxChars,
+      RxString? text,
+      RxBool? erroneous,
+      this.enabled,
+      this.decoration,
+      this.style,
+      this.textAlignVertical,
+      this.focusNode,
+      bool Function(String)? validator})
+      : text = text ?? "".obs,
+        erroneous = erroneous ??
+            validator?.call(text?.value ?? "").notObs() ??
+            false.obs,
+        validator = validator ?? ((_) => true) {
     _controller = TextEditingController(text: this.text.value);
   }
 
   @override
   Widget build(final BuildContext context) => Obx(() => TextField(
-    controller: _controller,
-    onChanged: (text) {
-      this.text.value = text;
-      erroneous.value = !validator(text);
-    },
-    decoration: InputDecoration(
-      label: Text(label),
-      errorText: erroneous.value ? "" : null,
-      errorStyle: const TextStyle(height: 0),
-      errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: RunalyzerColors.INQUEST_RED)),
-      border: const OutlineInputBorder()
-    ),
-    inputFormatters: [LengthLimitingTextInputFormatter(maxChars)],
-  ));
+        controller: _controller,
+        onChanged: (text) {
+          this.text.value = text;
+          erroneous.value = !validator(text);
+        },
+        decoration: InputDecoration(
+            label: Text(label),
+            errorText: erroneous.value ? "" : null,
+            errorStyle: const TextStyle(height: 0),
+            errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: RunalyzerColors.INQUEST_RED)),
+            border: const OutlineInputBorder()),
+        inputFormatters: [LengthLimitingTextInputFormatter(maxChars)],
+      ));
 }

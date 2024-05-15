@@ -8,50 +8,39 @@ import 'package:runalyzer_client/pages/static/controller/static_page_controller.
 
 class PlayerDpsChart extends ChartModelBuilder {
   @override
-  ChartModel build(Iterable<StaticRun> runs, Iterable<String> members) {
+  ChartModel build(Iterable<StaticAnalysis> analyses, Iterable<String> members,
+      bool _, final bool withDate) {
     ChartModelBuilder.CHART_COLORS.reset();
 
-    final Map<Point<double>, String> tooltips = {};
-    final List<FlSpot> compDps = chartData(
-        runs,
-            (el) => el.analysis!.compDps.roundToDouble(),
-        onXY: (x, y, el) => tooltips[Point(x, y)] =
-            el.analysis!.compDps.roundToDouble().toString()
-    );
+    final List<LineChartBar> playerDps = members
+        .map((member) {
+          final List<String> tooltips = [];
 
-    final List<LineChartBar> playerDps = members.map((member) {
-      final List<String> tooltips = [];
-
-      return (
-        tooltips,
-        member,
-        chartData(
-          runs,
-          (el) => el.analysis!.avgDps[member]?.roundToDouble(),
-          onXY: (x, y, e) => tooltips.add("${member.characters.takeWhile((c) => c != '.').toString()}: ${e.analysis!.avgDps[member]?.roundToDouble() ?? 0}")
-        )
-      );
-    }).map((e) =>
-        LineChartBar(
+          return (
+            tooltips,
+            member,
+            chartData(
+                analyses, (el) => el.avgDps[member]?.roundToDouble(), withDate,
+                onXY: (x, y, e) => tooltips.add(
+                    "${member.characters.takeWhile((c) => c != '.').toString()}: ${e.avgDps[member]?.roundToDouble() ?? 0}"))
+          );
+        })
+        .map((e) => LineChartBar(
             e.$2,
             LineChartBarData(
               spots: e.$3,
               isCurved: true,
               color: ChartModelBuilder.CHART_COLORS.next(),
             ),
-            tooltips: e.$1
-        )
-    ).toList();
+            tooltips: e.$1))
+        .toList();
 
     return chartModel(
-        runs,
+        analyses,
         //[LineChartBar(LineChartBarData(spots: compDps, isCurved: true), tooltips: compDpsTts)] +
         playerDps,
+        bottomTitle: withDate ? null : const SideTitles(showTitles: false),
         leftTitle: const SideTitles(
-            showTitles: true,
-            reservedSize: 50,
-            interval: 2000
-        )
-    );
+            showTitles: true, reservedSize: 50, interval: 2000));
   }
 }

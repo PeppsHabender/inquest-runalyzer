@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -15,19 +13,18 @@ class ScaleIfNeeded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        builder: (_, constr) => Obx(() => _theWidget(constr))
-    );
+    return LayoutBuilder(builder: (_, constr) => Obx(() => _theWidget(constr)));
   }
 
   Widget _theWidget(final BoxConstraints constraints) {
     final Size? size = _size.value;
 
-    if(size == null) {
+    if (size == null) {
       return _unconstrainedRender();
     }
 
-    if(size.width <= constraints.maxWidth && size.height <= constraints.maxHeight) {
+    if (size.width <= constraints.maxWidth &&
+        size.height <= constraints.maxHeight) {
       return _child;
     }
 
@@ -35,14 +32,11 @@ class ScaleIfNeeded extends StatelessWidget {
   }
 
   Widget _unconstrainedRender() => UnconstrainedBox(
-    child: Offstage(
-      child: _MeasureSize(
-        key: _childKey,
-        onChange: (s) => _size.value = s,
-        child: _child
-      ),
-    ),
-  );
+        child: Offstage(
+          child: _MeasureSize(
+              key: _childKey, onChange: (s) => _size.value = s, child: _child),
+        ),
+      );
 }
 
 class _MeasureSizeRenderObject extends RenderProxyBox {
@@ -70,7 +64,8 @@ class _MeasureSize extends SingleChildRenderObjectWidget {
     required Key key,
     required void Function(Size) onChange,
     required Widget child,
-  }) : _onChange = onChange, super(key: key, child: child);
+  })  : _onChange = onChange,
+        super(key: key, child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) {

@@ -7,16 +7,16 @@ class LoadingAnimation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Row(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      _AnimatedDot(delay: 0),
-      SizedBox(width: 10),
-      _AnimatedDot(delay: 200),
-      SizedBox(width: 10),
-      _AnimatedDot(delay: 300),
-    ],
-  );
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _AnimatedDot(delay: 0),
+          SizedBox(width: 10),
+          _AnimatedDot(delay: 200),
+          SizedBox(width: 10),
+          _AnimatedDot(delay: 300),
+        ],
+      );
 }
 
 class _AnimatedDot extends StatefulWidget {
@@ -31,7 +31,8 @@ class _AnimatedDot extends StatefulWidget {
 final _scaleSequence = TweenSequence<double>(
   <TweenSequenceItem<double>>[
     TweenSequenceItem<double>(
-      tween: Tween<double>(begin: 1, end: 1.3).chain(CurveTween(curve: Curves.easeIn)),
+      tween: Tween<double>(begin: 1, end: 1.3)
+          .chain(CurveTween(curve: Curves.easeIn)),
       weight: 50.0,
     ),
     TweenSequenceItem<double>(
@@ -39,7 +40,8 @@ final _scaleSequence = TweenSequence<double>(
       weight: 20.0,
     ),
     TweenSequenceItem<double>(
-      tween: Tween<double>(begin: 1.3, end: 1).chain(CurveTween(curve: Curves.easeOut)),
+      tween: Tween<double>(begin: 1.3, end: 1)
+          .chain(CurveTween(curve: Curves.easeOut)),
       weight: 30.0,
     ),
   ],
@@ -48,7 +50,9 @@ final _scaleSequence = TweenSequence<double>(
 final _colorSequence = TweenSequence<Color?>(
   [
     TweenSequenceItem(
-      tween: ColorTween(begin: const Color(0xff1C1B1F), end: RunalyzerColors.INQUEST_RED).chain(CurveTween(curve: Curves.easeIn)),
+      tween: ColorTween(
+              begin: const Color(0xff1C1B1F), end: RunalyzerColors.INQUEST_RED)
+          .chain(CurveTween(curve: Curves.easeIn)),
       weight: 50.0,
     ),
     TweenSequenceItem(
@@ -56,13 +60,16 @@ final _colorSequence = TweenSequence<Color?>(
       weight: 20.0,
     ),
     TweenSequenceItem(
-      tween: ColorTween(begin: RunalyzerColors.INQUEST_RED, end: const Color(0xff1C1B1F)).chain(CurveTween(curve: Curves.easeOut)),
-      weight: 30.0
-    ),
+        tween: ColorTween(
+                begin: RunalyzerColors.INQUEST_RED,
+                end: const Color(0xff1C1B1F))
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 30.0),
   ],
 );
 
-class _AnimatedDotState extends State<_AnimatedDot> with SingleTickerProviderStateMixin {
+class _AnimatedDotState extends State<_AnimatedDot>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   late Animation<double> _scale;
@@ -76,9 +83,9 @@ class _AnimatedDotState extends State<_AnimatedDot> with SingleTickerProviderSta
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
-    )..addListener(() {setState(() {
-
-    });});
+    )..addListener(() {
+        setState(() {});
+      });
 
     _scale = _scaleSequence.animate(_controller);
     _color = _colorSequence.animate(_controller);

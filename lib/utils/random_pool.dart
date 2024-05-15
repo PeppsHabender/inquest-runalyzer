@@ -12,11 +12,13 @@ class PoolRandom<T> {
   }
 
   T next() {
-    if(_currPool.length <= _reset) _currPool.addAll(_initialPool);
+    if (_currPool.length <= _reset) _currPool.addAll(_initialPool);
 
     final int idx = _random.nextInt(_currPool.length);
     return _currPool.removeAt(idx);
   }
 
-  void reset() => _currPool..clear()..addAll(_initialPool);
+  void reset() => _currPool
+    ..clear()
+    ..addAll(_initialPool);
 }

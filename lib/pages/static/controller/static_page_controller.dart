@@ -9,26 +9,41 @@ import 'package:runalyzer_client/pages/static/controller/boon_chart.dart';
 import 'package:runalyzer_client/pages/static/controller/healing_barrier_chart.dart';
 import 'package:runalyzer_client/pages/static/controller/player_dps_chart.dart';
 import 'package:runalyzer_client/pages/static/controller/times_chart.dart';
+import 'package:runalyzer_client/utils/extensions.dart';
 import 'package:runalyzer_client/utils/random_pool.dart';
 import 'package:runalyzer_client/utils/widgets/line_chart.dart';
 
 class StaticPageController extends GetxController {
   static final List<ChartModelBuilder> _CHARTS = [
-    TimesChart(), PlayerDpsChart(), BoonChart(), PlayerHBpsChart()
+    TimesChart(),
+    PlayerDpsChart(),
+    BoonChart(),
+    PlayerHBpsChart()
   ];
 
   final Rx<ChartModel?> chart = Rx(null);
-  final RxInt selectedTab = 0.obs;
+  final RxInt selectedChart = 0.obs;
+  final RxInt selectedOverview = 0.obs;
 
-  void selectChart(final int chartIdx, final Iterable<StaticRun> runs,
-      final Iterable<String> members) {
-    selectedTab.value = chartIdx;
-    chart.value = _CHARTS[chartIdx].build(runs, members);
+  void selectChart(int chartIdx, final Iterable<StaticAnalysis> analyses,
+      final Iterable<String> members, final bool withDate,
+      {bool buildWipes = false}) {
+    if (chartIdx >= _CHARTS.length) {
+      chartIdx = 0;
+    }
+
+    selectedChart.value = chartIdx;
+    chart.value =
+        _CHARTS[chartIdx].build(analyses, members, buildWipes, withDate);
+  }
+
+  void selectCustomChart(final int chartIdx, final ChartModel chart) {
+    selectedChart.value = chartIdx;
+    this.chart.value = chart;
   }
 }
 
 abstract class ChartModelBuilder {
-  @protected
   static final PoolRandom<Color> CHART_COLORS = PoolRandom([
     const Color(0xFFFAFAFA),
     const Color(0xFFF06292),
@@ -47,53 +62,91 @@ abstract class ChartModelBuilder {
     const Color(0xFF8D6E63),
   ]);
 
-  final DateFormat _MONTH_FMT = DateFormat('MMM');
-  final DateFormat _DATE_FMT = DateFormat("MM/dd/yyyy HH:mm");
+  static final DateFormat _MONTH_FMT = DateFormat('MMM');
+  static final DateFormat _DATE_FMT = DateFormat("MM/dd/yyyy HH:mm");
 
-  ChartModel build(final Iterable<StaticRun> runs, final Iterable<String> members);
-
-  @protected
-  @nonVirtual
-  ChartModel chartModel(
-      final Iterable<StaticRun> runs,
-      final List<LineChartBar> bars,
-      {
-        final (double, double)? minMaxY,
-        final double tooltipFontSize = 14,
-        final SideTitles leftTitle = const SideTitles(showTitles: true)
-      }
-      ) => ChartModel(
-      bars: bars..add(LineChartBar(
-        RunalyzerLineChart.HIDDEN_ID,
-        LineChartBarData(
-          spots: runs.map((e) => FlSpot(e.analysis!.start!.date.millisecondsSinceEpoch.toDouble(), 0)).toList(),
-          color: Colors.transparent,
-        ),
-        tooltips: runs.map((e) => _DATE_FMT.format(e.analysis!.start!.date)).toList()
-      )),
-      bottomTitle: SideTitles(
-        showTitles: true,
-        getTitlesWidget: (val, meta) => Text(_MONTH_FMT.format(DateTime.fromMillisecondsSinceEpoch(val.round())))
-      ),
-      minMaxY: minMaxY,
-      tooltipFontSize: tooltipFontSize,
-      leftTitle: leftTitle
-  );
+  ChartModel build(
+      final Iterable<StaticAnalysis> analyses,
+      final Iterable<String> members,
+      final bool buildWipes,
+      final bool withDate);
 
   @protected
   @nonVirtual
-  List<FlSpot> chartData<T>(
-      final Iterable<StaticRun> runs,
-      final double? Function(StaticRun) yExtractor,
-      {
-        final void Function(double, double, StaticRun)? onXY
-      }
-      ) => runs.map((e) {
-    final double x = e.analysis!.start!.date.millisecondsSinceEpoch.toDouble();
-    final double? y = yExtractor(e);
+  ChartModel chartModel(final Iterable<StaticAnalysis> analyses,
+          final List<LineChartBar> bars,
+          {final (double, double)? minMaxY,
+          final double tooltipFontSize = 14,
+          final SideTitles leftTitle = const SideTitles(showTitles: true),
+          final SideTitles? bottomTitle}) =>
+      genericChartModel(analyses, (e) => e.start!.date, bars,
+          minMaxY: minMaxY,
+          tooltipFontSize: tooltipFontSize,
+          leftTitle: leftTitle,
+          bottomTitle: bottomTitle);
 
-    if(y != null) onXY?.call(x, y, e);
+  @protected
+  @nonVirtual
+  List<FlSpot> chartData(
+          final Iterable<StaticAnalysis> analyses,
+          final double? Function(StaticAnalysis) yExtractor,
+          final bool withDate,
+          {final void Function(double, double, StaticAnalysis)? onXY}) =>
+      genericChartData(
+          analyses,
+          (i, e) => withDate
+              ? e.start?.date.millisecondsSinceEpoch.toDouble()
+              : i.toDouble(),
+          yExtractor,
+          onXY: onXY);
 
-    return y == null ? null : FlSpot(x, y);
-  }).whereType<FlSpot>().toList();
+  static ChartModel genericChartModel<T>(
+          final Iterable<T> items,
+          final DateTime Function(T) timeExtractor,
+          final List<LineChartBar> bars,
+          {final (double, double)? minMaxY,
+          final double tooltipFontSize = 14,
+          final SideTitles? bottomTitle,
+          final SideTitles leftTitle =
+              const SideTitles(showTitles: true, reservedSize: 50)}) =>
+      ChartModel(
+          bars: bars
+            ..add(LineChartBar(
+                RunalyzerLineChart.HIDDEN_ID,
+                LineChartBarData(
+                  spots: items
+                      .map((e) => FlSpot(
+                          timeExtractor(e).millisecondsSinceEpoch.toDouble(),
+                          0))
+                      .toList(),
+                  color: Colors.transparent,
+                ),
+                tooltips: items
+                    .map((e) => _DATE_FMT.format(timeExtractor(e)))
+                    .toList())),
+          bottomTitle: bottomTitle ??
+              SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (val, meta) => Text(_MONTH_FMT.format(
+                      DateTime.fromMillisecondsSinceEpoch(val.round())))),
+          minMaxY: minMaxY,
+          tooltipFontSize: tooltipFontSize,
+          leftTitle: leftTitle);
+
+  static List<FlSpot> genericChartData<T>(
+          final Iterable<T> analyses,
+          final double? Function(int, T) xExtractor,
+          final double? Function(T) yExtractor,
+          {final void Function(double, double, T)? onXY}) =>
+      analyses
+          .mapIndexed((idx, e) {
+            final double? x = xExtractor(idx, e);
+            final double? y = yExtractor(e);
+
+            if (x != null && y != null) onXY?.call(x, y, e);
+
+            return x == null || y == null ? null : FlSpot(x, y);
+          })
+          .whereType<FlSpot>()
+          .toList();
 }

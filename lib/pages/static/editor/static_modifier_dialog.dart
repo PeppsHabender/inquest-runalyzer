@@ -7,7 +7,6 @@ import 'package:runalyzer_client/pages/static/editor/static_editor.dart';
 import 'package:runalyzer_client/utils/extensions.dart';
 
 class StaticModifier extends StatelessWidget {
-
   late final bool _showUploader;
   late final bool _showModifier;
   late final StaticModifierController _modifierController;
@@ -23,12 +22,12 @@ class StaticModifier extends StatelessWidget {
     final List<Tab> tabs = [];
     final List<Widget> tabViews = [];
 
-    if(_showUploader) {
+    if (_showUploader) {
       tabs.add(const Tab(icon: FeatherIcon(FeatherIcons.upload)));
       tabViews.add(Uploader());
     }
 
-    if(_showModifier) {
+    if (_showModifier) {
       tabs.add(const Tab(icon: FeatherIcon(FeatherIcons.edit)));
       tabViews.add(StaticEditor(_modifierController));
     }
@@ -40,16 +39,12 @@ class StaticModifier extends StatelessWidget {
           children: [
             SizedBox(
               width: 500,
-              child: TabBar(
-                  tabs: tabs
-              ),
+              child: TabBar(tabs: tabs),
             ),
             SizedBox(
               width: 500,
               height: 500,
-              child: TabBarView(
-                  children: tabViews
-              ),
+              child: TabBarView(children: tabViews),
             )
           ],
         ),

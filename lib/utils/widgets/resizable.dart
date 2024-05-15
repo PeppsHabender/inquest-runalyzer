@@ -17,8 +17,8 @@ class Resizable extends StatefulWidget {
     this.maxWidth = 300,
     this.minWidth = 200,
   }) : assert(maxWidth > initialWidth &&
-      initialWidth >= minWidth &&
-      maxWidth > minWidth);
+            initialWidth >= minWidth &&
+            maxWidth > minWidth);
 
   @override
   State<Resizable> createState() => _ResizableState();

@@ -12,5 +12,6 @@ final class RunalyzerStorage {
   static set apiKey(String? apiKey) => _storage[_API_KEY] = apiKey ?? "";
 
   static String? get accountName => _storage[_ACC_NAME];
-  static set accountName(String? accountName) => _storage[_ACC_NAME] = accountName ?? "";
+  static set accountName(String? accountName) =>
+      _storage[_ACC_NAME] = accountName ?? "";
 }
